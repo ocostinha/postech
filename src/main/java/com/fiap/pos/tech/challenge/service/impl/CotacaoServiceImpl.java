@@ -21,6 +21,15 @@ public class CotacaoServiceImpl implements CotacaoService {
         // TODO enviar para a fila de comunicação com o fornecedor de dados do cliente
         // TODO enviar para a fila de comunicação com o fornecedor de dados do veiculo
 
-        return mapper.toEntity(repository.save(mapper.toDb(cotacao)));
+        return mapper.toEntity(
+                repository.save(
+                        mapper.toDb(
+                                cotacao,
+                                cotacao.getDadosCliente().getDadosPessoais(),
+                                cotacao.getDadosCliente().getDadosContato(),
+                                cotacao.getDadosCliente().getDadosMoradia()
+                        )
+                )
+        );
     }
 }
