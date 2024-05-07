@@ -22,4 +22,8 @@ public class MapperConfig {
     @Bean
     @Primary
     public DadosPessoaisMapper dadosPessoaisMapper() { return new DadosPessoaisMapperImpl(); }
+
+    @Bean
+    @Primary
+    public DadosVeiculoMapper dadosVeiculoMapper() { return new DadosVeiculoMapperImpl(); }
 }

@@ -21,6 +21,9 @@ public abstract class CotacaoMapper {
     @Autowired
     private DadosPessoaisMapper dadosPessoaisMapper;
 
+    @Autowired
+    private DadosVeiculoMapper dadosVeiculoMapper;
+
     @Mapping(source = "cpf", target = "dadosCliente.dadosPessoais.cpf")
     @Mapping(source = "placaVeiculo", target = "dadosVeiculo.placa")
     @Mapping(source = "email", target = "dadosCliente.dadosContato.email")
@@ -34,7 +37,8 @@ public abstract class CotacaoMapper {
     public abstract CotacaoEntity toDb(Cotacao entity,
                                        DadosPessoais dpEntity,
                                        DadosContato dcEntity,
-                                       DadosMoradia dmEntity
+                                       DadosMoradia dmEntity,
+                                       DadosVeiculo dvEntity
     );
 
     @AfterMapping
@@ -43,5 +47,6 @@ public abstract class CotacaoMapper {
         entity.getDadosCliente().setDadosContato(dadosContatoMapper.toEntity(db));
         entity.getDadosCliente().setDadosMoradia(dadosMoradiaMapper.toEntity(db));
         entity.getDadosCliente().setDadosPessoais(dadosPessoaisMapper.toEntity(db));
+        entity.setDadosVeiculo(dadosVeiculoMapper.toEntity(db));
     }
 }

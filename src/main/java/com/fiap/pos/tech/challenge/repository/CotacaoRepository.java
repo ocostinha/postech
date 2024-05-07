@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface CotacaoRepository extends JpaRepository<CotacaoEntity, UUID> {
+    CotacaoEntity findByCpfAndPlaca(String cpf, String placa);
 }
