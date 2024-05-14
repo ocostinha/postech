@@ -5,9 +5,10 @@ services:
     container_name: 'localstack'
     environment:
       - SERVICES=sqs
-      - DEFAULT_REGION=us-east-1
-      - AWS_DEFAULT_REGION=us-east-1
       - DEBUG=1
       - DATA_DIR=/tmp/localstack/data
+      - AWS_ACCESS_KEY_ID=NOT_VALID_KEY
+      - AWS_DEFAULT_REGION=us-west-2
+      - AWS_SECRET_ACCESS_KEY=NOT_VALID_SECRET
     ports:
       - '4566:4566'

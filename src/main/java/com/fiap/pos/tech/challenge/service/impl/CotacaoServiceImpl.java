@@ -6,8 +6,9 @@ import com.fiap.pos.tech.challenge.mappers.CotacaoMapper;
 import com.fiap.pos.tech.challenge.repository.CotacaoRepository;
 import com.fiap.pos.tech.challenge.repository.entity.CotacaoEntity;
 import com.fiap.pos.tech.challenge.service.CotacaoService;
+import com.fiap.pos.tech.challenge.service.SqsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,12 +19,14 @@ public class CotacaoServiceImpl implements CotacaoService {
     @Autowired
     private CotacaoMapper mapper;
 
-//    @Autowired
-//    private QueueMessagingTemplate queueMessagingTemplate;
+    @Autowired
+    private SqsService sqsService;
 
-    private static final String DADOS_PESSOAIS_SQS = "dados_pessoais_sqs";
+    @Value("${sqs.queueName.dados-veiculo}")
+    private String sqsDadosVeiculo;
 
-    private static final String DADOS_VEICULOS_SQS = "dados_veiculos_sqs";
+    @Value("${sqs.queueName.dados-pessoais}")
+    private String sqsDadosPessoais;
 
     @Override
     public Cotacao receberCotacao(Cotacao cotacao) {
@@ -43,17 +46,12 @@ public class CotacaoServiceImpl implements CotacaoService {
                 )
         );
 
-//        this.queueMessagingTemplate.convertAndSend(DADOS_PESSOAIS_SQS, cotacao.getDadosCliente().getDadosPessoais().getCpf());
-//        this.queueMessagingTemplate.convertAndSend(DADOS_VEICULOS_SQS, cotacao.getDadosVeiculo().getPlaca());
+        sqsService.send(sqsDadosVeiculo, cotacao.getDadosVeiculo().getPlaca());
+        sqsService.send(sqsDadosPessoais, cotacao.getDadosCliente().getDadosPessoais().getCpf());
 
         return mapper.toEntity(
                 novaCotacao
         );
-    }
-
-    @SqsListener("dados_pessoais_sqs")
-    public void receiveMessage(String message) {
-        System.out.println(message);
     }
 
     private CotacaoEntity cotacaoExistenteStrategy(CotacaoEntity cotacao) {
