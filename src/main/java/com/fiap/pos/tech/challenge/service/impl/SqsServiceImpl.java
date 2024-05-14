@@ -1,5 +1,7 @@
 package com.fiap.pos.tech.challenge.service.impl;
 
+import com.fiap.pos.tech.challenge.service.DadosPessoaisService;
+import com.fiap.pos.tech.challenge.service.DadosVeiculoService;
 import com.fiap.pos.tech.challenge.service.SqsService;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
@@ -10,20 +12,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class SqsServiceImpl implements SqsService {
     @Autowired
-    SqsTemplate sqsTemplate;
+    private SqsTemplate sqsTemplate;
+
+    @Autowired
+    private DadosPessoaisService dadosPessoaisService;
+
+    @Autowired
+    private DadosVeiculoService dadosVeiculoService;
 
     @Override
-    public void send(String queueName, String message) {
+    public void enviar(String queueName, String message) {
         this.sqsTemplate.send(queueName, MessageBuilder.withPayload(message).build());
     }
 
     @SqsListener(value = "${sqs.queueName.dados-pessoais}")
     public void dadosPessoaisListener(String message) {
-        System.out.println(message);
+        dadosPessoaisService.consultar(message);
     }
 
     @SqsListener(value = "${sqs.queueName.dados-pessoais}")
     public void dadosVeiculoListener(String message) {
-        System.out.println(message);
+        dadosVeiculoService.consultar(message);
     }
 }

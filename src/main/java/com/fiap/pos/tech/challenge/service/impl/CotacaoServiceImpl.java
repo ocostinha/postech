@@ -46,8 +46,8 @@ public class CotacaoServiceImpl implements CotacaoService {
                 )
         );
 
-        sqsService.send(sqsDadosVeiculo, cotacao.getDadosVeiculo().getPlaca());
-        sqsService.send(sqsDadosPessoais, cotacao.getDadosCliente().getDadosPessoais().getCpf());
+        sqsService.enviar(sqsDadosVeiculo, cotacao.getDadosVeiculo().getPlaca());
+        sqsService.enviar(sqsDadosPessoais, cotacao.getDadosCliente().getDadosPessoais().getCpf());
 
         return mapper.toEntity(
                 novaCotacao
