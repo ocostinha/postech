@@ -25,8 +25,19 @@ public class ApoliceController {
             @RequestParam(name = "cotacao_assinada") MultipartFile cotacaoAssinada) {
         return new SuccessResponseDTO(
                 String.format("Apólice %s gerada com sucesso. " +
-                        "Em breve o(a) senhor(a) receberá por email sua apólice",
+                                "Em breve o(a) senhor(a) receberá por email sua apólice",
                         apoliceService.gerarApolice(numeroCotacao, cotacaoAssinada))
+        );
+    }
+
+    @PutMapping(value = "/cancelar/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public SuccessResponseDTO cancelarApolice(@PathVariable @NotNull @Valid UUID id) {
+        apoliceService.cancelarApolice(id);
+
+        return new SuccessResponseDTO(
+                String.format("Apólice %s cancelada com sucesso. Em breve o(a) senhor(a) receberá " +
+                        "por email seu destrato", id)
         );
     }
 }

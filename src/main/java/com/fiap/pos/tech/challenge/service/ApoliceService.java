@@ -6,4 +6,8 @@ import java.util.UUID;
 
 public interface ApoliceService {
     UUID gerarApolice(UUID numeroCotacao, MultipartFile cotacaoAssinada);
+    void enviarApolicesPendentes();
+    void cancelarApolice(UUID id);
+    void enviarDestratos();
+    void encerrarApolices();
 }

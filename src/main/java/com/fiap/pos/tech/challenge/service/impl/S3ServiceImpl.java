@@ -4,38 +4,54 @@ import com.fiap.pos.tech.challenge.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.net.URI;
+import java.io.File;
+import java.io.FileOutputStream;
 
 @Service
 public class S3ServiceImpl implements S3Service {
     @Autowired
-    private S3Client s3Template;
+    private S3Client s3Client;
 
     @Override
     public void enviar(String bucket, String key, MultipartFile file) {
         try {
-            var s3Client = S3Client
-                    .builder()
-                    .credentialsProvider(DefaultCredentialsProvider.create())
-                    .region(Region.of("us-east-1"))
-                    .endpointOverride(URI.create("http://localhost:4566"))
-                    .forcePathStyle(true) // <-- this fixes it.
-                    .build();
-
-            PutObjectRequest request = PutObjectRequest.builder()
+            PutObjectRequest requisicao = PutObjectRequest.builder()
                     .bucket(bucket)
                     .key(key)
                     .build();
 
-            s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
+            s3Client.putObject(requisicao, RequestBody.fromBytes(file.getBytes()));
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }
+    }
+
+    public File ler(String bucket, String nomeArquivo) {
+        try {
+            GetObjectRequest requisicao = GetObjectRequest
+                    .builder()
+                    .bucket(bucket)
+                    .key(nomeArquivo)
+                    .build();
+
+            var resultado = s3Client.getObject(requisicao);
+
+            File arquivo = new File(nomeArquivo);
+
+            try (FileOutputStream outputStream = new FileOutputStream(arquivo)) {
+                outputStream.write(resultado.readAllBytes());
+            }
+
+            return arquivo;
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+
+        return null;
     }
 }

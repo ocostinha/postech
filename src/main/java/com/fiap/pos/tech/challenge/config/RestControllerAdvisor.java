@@ -1,6 +1,7 @@
 package com.fiap.pos.tech.challenge.config;
 
 import com.fiap.pos.tech.challenge.controllers.dto.ErrorResponseDTO;
+import com.fiap.pos.tech.challenge.exceptions.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -33,5 +34,12 @@ public class RestControllerAdvisor {
     public ErrorResponseDTO<String> handleMissingServletRequestParameterExceptions(
             MissingServletRequestParameterException ex) {
         return new ErrorResponseDTO<>(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
+    }
+
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(BusinessException.class)
+    public ErrorResponseDTO<String> handleBusinessExceptions(
+            BusinessException ex) {
+        return new ErrorResponseDTO<>(ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY.value());
     }
 }
