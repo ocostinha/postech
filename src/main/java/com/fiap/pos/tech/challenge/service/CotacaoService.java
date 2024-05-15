@@ -11,4 +11,6 @@ public interface CotacaoService {
     void enviarCotacao(UUID id);
     void gerarCotacoesPendentes();
     void aprovarCotacao(UUID id);
+    void enviarCotacao(UUID id, String email);
+    void deletarCotacao(UUID id);
 }

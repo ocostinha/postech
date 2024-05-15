@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DadosMoradia {
+public class DadosEndereco {
     private String logradouro;
     private String numero;
     private String complemento;

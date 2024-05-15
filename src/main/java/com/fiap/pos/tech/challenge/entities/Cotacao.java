@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Cotacao {
     private UUID id;
-    private DadosCliente dadosCliente;
+    private DadosCadastrais dadosCadastrais;
     private DadosVeiculo dadosVeiculo;
     private LocalDateTime dataHoraCriacao;
     private LocalDateTime dataHoraExpiracao;

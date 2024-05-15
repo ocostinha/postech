@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "COTACAO")
+@Table(name = "APOLICE")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -109,4 +109,7 @@ public class ApoliceEntity {
 
     @Column
     private StatusEnum status;
+
+    @Column
+    private Long cnh;
 }

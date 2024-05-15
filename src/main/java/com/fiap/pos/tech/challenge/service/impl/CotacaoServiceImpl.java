@@ -4,9 +4,9 @@ import com.fiap.pos.tech.challenge.entities.Cotacao;
 import com.fiap.pos.tech.challenge.enums.StatusEnum;
 import com.fiap.pos.tech.challenge.exceptions.BusinessException;
 import com.fiap.pos.tech.challenge.mappers.CotacaoMapper;
+import com.fiap.pos.tech.challenge.repository.ApoliceRepository;
 import com.fiap.pos.tech.challenge.repository.CotacaoRepository;
 import com.fiap.pos.tech.challenge.repository.entity.CotacaoEntity;
-import com.fiap.pos.tech.challenge.service.ApoliceService;
 import com.fiap.pos.tech.challenge.service.CotacaoService;
 import com.fiap.pos.tech.challenge.service.S3Service;
 import com.fiap.pos.tech.challenge.service.SqsService;
@@ -35,7 +35,7 @@ public class CotacaoServiceImpl implements CotacaoService {
     private S3Service s3Service;
 
     @Autowired
-    private ApoliceService apoliceService;
+    private ApoliceRepository apoliceRepository;
 
     @Value("${sqs.queueName.dados-veiculo}")
     private String sqsDadosVeiculo;
@@ -46,14 +46,14 @@ public class CotacaoServiceImpl implements CotacaoService {
     private static final String BUCKET = "documentos";
 
     @Override
-    public void receberCotacao(Cotacao cotacao) {
+    public void receberCotacao(final Cotacao cotacao) {
         if (validarCotacaoExistente(cotacao)) {
             repository.save(
                     mapper.toDb(
                             cotacao,
-                            cotacao.getDadosCliente().getDadosPessoais(),
-                            cotacao.getDadosCliente().getDadosContato(),
-                            cotacao.getDadosCliente().getDadosMoradia(),
+                            cotacao.getDadosCadastrais().getDadosPessoais(),
+                            cotacao.getDadosCadastrais().getDadosContato(),
+                            cotacao.getDadosCadastrais().getDadosEndereco(),
                             cotacao.getDadosVeiculo()
                     )
             );
@@ -63,7 +63,7 @@ public class CotacaoServiceImpl implements CotacaoService {
     }
 
     @Override
-    public Cotacao consultarCotacao(UUID id) {
+    public Cotacao consultarCotacao(final UUID id) {
         return mapper.toEntity(repository.getReferenceById(id));
     }
 
@@ -99,13 +99,35 @@ public class CotacaoServiceImpl implements CotacaoService {
         repository.save(cotacao);
     }
 
+    @Override
+    public void enviarCotacao(final UUID id, final String email) {
+        var cotacao = repository.getReferenceById(id);
+
+        if (email == null) {
+            //TODO enviar cotação para o email da cotação
+        } else {
+            //TODO enviar cotação para o email informado
+        }
+    }
+
+    @Override
+    public void deletarCotacao(final UUID id) {
+        final var cotacao = repository.getReferenceById(id);
+
+        if (!cotacao.getStatus().equals(StatusEnum.COTACAO_APROVADA)) {
+            repository.delete(cotacao);
+        } else {
+            throw new BusinessException("Apenas cotações não aprovadas podem ser excluidas");
+        }
+    }
+
     private Boolean validarCotacaoExistente(final Cotacao cotacao) {
         CotacaoEntity cotacaoExistente = obterCotacaoExistente(cotacao);
 
         if (cotacaoExistente != null) {
             switch (cotacaoExistente.getStatus()) {
                 case COTACAO_APROVADA -> {
-                    var apolice = apoliceService.obterApolicePelaCotacao(cotacao.getId());
+                    var apolice = apoliceRepository.getReferenceById(cotacao.getId());
                     if (apolice.getStatus().equals(APOLICE_ENCERRADA) ||
                             apolice.getStatus().equals(DESTRATO_ENVIADO)) {
                         zerarCotacao(cotacaoExistente);
@@ -123,7 +145,7 @@ public class CotacaoServiceImpl implements CotacaoService {
                 }
                 case COTACAO_SOLICITADA, COTACAO_PRONTA ->
                     throw new BusinessException("Cotação em preparação, logo o(a) senhor(a) " +
-                            "irá receber por email.");
+                            "irá recebe-la por email.");
                 default ->
                     enviarCotacao(cotacaoExistente.getId());
             }
@@ -134,7 +156,7 @@ public class CotacaoServiceImpl implements CotacaoService {
 
     private void enfileirarConsultas(final Cotacao cotacao) {
         sqsService.enviar(sqsDadosVeiculo, cotacao.getDadosVeiculo().getPlaca());
-        sqsService.enviar(sqsDadosPessoais, cotacao.getDadosCliente().getDadosPessoais().getCpf());
+        sqsService.enviar(sqsDadosPessoais, cotacao.getDadosCadastrais().getDadosPessoais().getCpf());
     }
 
     private void zerarCotacao(final CotacaoEntity cotacao){
@@ -176,7 +198,7 @@ public class CotacaoServiceImpl implements CotacaoService {
 
     private CotacaoEntity obterCotacaoExistente(final Cotacao cotacao) {
         return repository.findByCpfAndPlaca(
-                cotacao.getDadosCliente().getDadosPessoais().getCpf(),
+                cotacao.getDadosCadastrais().getDadosPessoais().getCpf(),
                 cotacao.getDadosVeiculo().getPlaca());
     }
 

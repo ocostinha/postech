@@ -18,7 +18,7 @@ public class S3ServiceImpl implements S3Service {
     private S3Client s3Client;
 
     @Override
-    public void enviar(String bucket, String key, MultipartFile file) {
+    public void enviar(final String bucket, final String key, final MultipartFile file) {
         try {
             PutObjectRequest requisicao = PutObjectRequest.builder()
                     .bucket(bucket)
@@ -31,7 +31,7 @@ public class S3ServiceImpl implements S3Service {
         }
     }
 
-    public File ler(String bucket, String nomeArquivo) {
+    public File ler(final String bucket, final String nomeArquivo) {
         try {
             GetObjectRequest requisicao = GetObjectRequest
                     .builder()

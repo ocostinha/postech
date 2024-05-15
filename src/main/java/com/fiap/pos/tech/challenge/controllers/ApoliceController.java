@@ -1,6 +1,6 @@
 package com.fiap.pos.tech.challenge.controllers;
 
-import com.fiap.pos.tech.challenge.controllers.dto.SuccessResponseDTO;
+import com.fiap.pos.tech.challenge.controllers.dto.system.SuccessResponseDTO;
 import com.fiap.pos.tech.challenge.service.ApoliceService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -39,5 +39,15 @@ public class ApoliceController {
                 String.format("Apólice %s cancelada com sucesso. Em breve o(a) senhor(a) receberá " +
                         "por email seu destrato", id)
         );
+    }
+
+    @GetMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public SuccessResponseDTO reenviarApolice(
+            @PathVariable @NotNull @Valid UUID id, @RequestParam String email) {
+        apoliceService.enviarApolice(id, email);
+
+        return new SuccessResponseDTO("Solicitação efetuada com sucesso. " +
+                "Em breve o(a) senhor(a) receberá por email a sua apólice");
     }
 }

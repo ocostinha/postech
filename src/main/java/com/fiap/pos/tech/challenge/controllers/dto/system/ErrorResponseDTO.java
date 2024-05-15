@@ -1,4 +1,4 @@
-package com.fiap.pos.tech.challenge.controllers.dto;
+package com.fiap.pos.tech.challenge.controllers.dto.system;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

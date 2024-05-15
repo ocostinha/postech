@@ -21,17 +21,17 @@ public class SqsServiceImpl implements SqsService {
     private DadosVeiculoService dadosVeiculoService;
 
     @Override
-    public void enviar(String queueName, String message) {
+    public void enviar(final String queueName, final String message) {
         this.sqsTemplate.send(queueName, MessageBuilder.withPayload(message).build());
     }
 
     @SqsListener(value = "${sqs.queueName.dados-pessoais}")
-    public void dadosPessoaisListener(String message) {
+    public void dadosPessoaisListener(final String message) {
         dadosPessoaisService.consultar(message);
     }
 
     @SqsListener(value = "${sqs.queueName.dados-veiculo}")
-    public void dadosVeiculoListener(String message) {
+    public void dadosVeiculoListener(final String message) {
         dadosVeiculoService.consultar(message);
     }
 }

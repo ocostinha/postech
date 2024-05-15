@@ -16,7 +16,7 @@ public abstract class CotacaoMapper {
     private DadosContatoMapper dadosContatoMapper;
 
     @Autowired
-    private DadosMoradiaMapper dadosMoradiaMapper;
+    private DadosEnderecoMapper dadosEnderecoMapper;
 
     @Autowired
     private DadosPessoaisMapper dadosPessoaisMapper;
@@ -24,11 +24,17 @@ public abstract class CotacaoMapper {
     @Autowired
     private DadosVeiculoMapper dadosVeiculoMapper;
 
-    @Mapping(source = "cpf", target = "dadosCliente.dadosPessoais.cpf")
+    @Mapping(source = "cpf", target = "dadosCadastrais.dadosPessoais.cpf")
     @Mapping(source = "placaVeiculo", target = "dadosVeiculo.placa")
-    @Mapping(source = "email", target = "dadosCliente.dadosContato.email")
+    @Mapping(source = "email", target = "dadosCadastrais.dadosContato.email")
+    @Mapping(target = "dataHoraCriacao", ignore = true)
+    @Mapping(target = "dataHoraExpiracao", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "status", ignore = true)
     public abstract Cotacao toEntity(CotacaoDTO dto);
 
+    @Mapping(target = "dadosCadastrais", ignore = true)
+    @Mapping(target = "dadosVeiculo", ignore = true)
     public abstract Cotacao toEntity(CotacaoEntity db);
 
     @Mapping(target = "id", defaultExpression = MappingUtils.GENERATE_UUID_EXPRESSION)
@@ -37,16 +43,16 @@ public abstract class CotacaoMapper {
     public abstract CotacaoEntity toDb(Cotacao entity,
                                        DadosPessoais dpEntity,
                                        DadosContato dcEntity,
-                                       DadosMoradia dmEntity,
+                                       DadosEndereco dmEntity,
                                        DadosVeiculo dvEntity
     );
 
     @AfterMapping
     protected void enrichEntity(@MappingTarget Cotacao entity, CotacaoEntity db) {
-        entity.setDadosCliente(new DadosCliente());
-        entity.getDadosCliente().setDadosContato(dadosContatoMapper.toEntity(db));
-        entity.getDadosCliente().setDadosMoradia(dadosMoradiaMapper.toEntity(db));
-        entity.getDadosCliente().setDadosPessoais(dadosPessoaisMapper.toEntity(db));
+        entity.setDadosCadastrais(new DadosCadastrais());
+        entity.getDadosCadastrais().setDadosContato(dadosContatoMapper.toEntity(db));
+        entity.getDadosCadastrais().setDadosEndereco(dadosEnderecoMapper.toEntity(db));
+        entity.getDadosCadastrais().setDadosPessoais(dadosPessoaisMapper.toEntity(db));
         entity.setDadosVeiculo(dadosVeiculoMapper.toEntity(db));
     }
 }

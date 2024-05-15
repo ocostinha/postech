@@ -9,6 +9,7 @@ public class DadosPessoais {
     private String nome;
     private String sobrenome;
     private String cpf;
+    private Long cnh;
     private String nomeMae;
     private String nomePai;
 }

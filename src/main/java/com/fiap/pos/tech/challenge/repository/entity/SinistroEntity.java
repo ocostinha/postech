@@ -1,6 +1,6 @@
 package com.fiap.pos.tech.challenge.repository.entity;
 
-import com.fiap.pos.tech.challenge.enums.StatusEnum;
+import com.fiap.pos.tech.challenge.enums.StatusSinistroEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,18 +10,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "COTACAO")
+@Table(name = "SINISTRO")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CotacaoEntity {
+public class SinistroEntity {
     @Id
     private UUID id;
+
+    @Column
+    private UUID idApolice;
+
+    @Column
+    private String descricao;
+
+    @Column
+    private LocalDate data;
+
+    @Column
+    private LocalTime hora;
 
     @Column
     private String nome;
@@ -33,10 +47,7 @@ public class CotacaoEntity {
     private String cpf;
 
     @Column
-    private String nomeMae;
-
-    @Column
-    private String nomePai;
+    private String cnh;
 
     @Column
     private String email;
@@ -81,32 +92,8 @@ public class CotacaoEntity {
     private Long cep;
 
     @Column
-    private String placa;
-
-    @Column
-    private String renavan;
-
-    @Column
-    private String chassi;
-
-    @Column
-    private String modelo;
-
-    @Column
-    private Integer anoFabricacao;
-
-    @Column
-    private Integer anoModelo;
-
-    @Column
     private LocalDateTime dataHoraCriacao;
 
     @Column
-    private LocalDateTime dataHoraExpiracao;
-
-    @Column
-    private StatusEnum status;
-
-    @Column
-    private Long cnh;
+    private StatusSinistroEnum status;
 }

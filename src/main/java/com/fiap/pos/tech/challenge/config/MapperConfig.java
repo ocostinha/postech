@@ -13,7 +13,7 @@ public class MapperConfig {
 
     @Bean
     @Primary
-    public DadosMoradiaMapper dadosMoradiaMapper() { return new DadosMoradiaMapperImpl(); }
+    public DadosEnderecoMapper dadosEnderecoMapper() { return new DadosEnderecoMapperImpl(); }
 
     @Bean
     @Primary
@@ -30,4 +30,8 @@ public class MapperConfig {
     @Bean
     @Primary
     public ApoliceMapper apoliceMapper() { return new ApoliceMapperImpl(); }
+
+    @Bean
+    @Primary
+    public SinistroMapper sinistroMapper() { return new SinistroMapperImpl(); }
 }

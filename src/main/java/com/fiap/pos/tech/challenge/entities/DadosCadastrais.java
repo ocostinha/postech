@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DadosCliente {
+public class DadosCadastrais {
     private DadosPessoais dadosPessoais;
     private DadosContato dadosContato;
-    private DadosMoradia dadosMoradia;
+    private DadosEndereco dadosEndereco;
 }
 

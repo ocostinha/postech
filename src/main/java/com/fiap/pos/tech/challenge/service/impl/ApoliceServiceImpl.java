@@ -91,6 +91,17 @@ public class ApoliceServiceImpl implements ApoliceService {
                 });
     }
 
+    @Override
+    public void enviarApolice(final UUID id, final String email) {
+        final var apolice = repository.getReferenceById(id);
+
+        if (email == null) {
+            //TODO enviar apolice para o email informado
+        } else {
+            //TODO enviar apolice para o email do cadastro
+        }
+    }
+
     private String gerarNomeDocumentoCotacaoAssinada(final UUID idCotacao) {
         return String.format("cotacao_assinada_%s.pdf", idCotacao);
     }

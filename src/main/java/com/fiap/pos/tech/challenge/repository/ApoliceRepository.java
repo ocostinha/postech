@@ -7,10 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface ApoliceRepository extends JpaRepository<ApoliceEntity, UUID> {
     List<ApoliceEntity> findByStatus(StatusEnum status);
     List<ApoliceEntity> findByStatusAndDataHoraExpiracaoBefore(StatusEnum status, LocalDateTime expiracao);
+    Optional<ApoliceEntity> findByIdCotacao(UUID idCotacao);
 }

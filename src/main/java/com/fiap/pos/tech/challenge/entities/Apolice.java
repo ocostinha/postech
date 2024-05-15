@@ -14,7 +14,7 @@ import java.util.UUID;
 public class Apolice {
     private UUID id;
     private UUID idCotacao;
-    private DadosCliente dadosCliente;
+    private DadosCadastrais dadosCadastrais;
     private DadosVeiculo dadosVeiculo;
     private LocalDateTime dataHoraCriacao;
     private LocalDateTime dataHoraExpiracao;
