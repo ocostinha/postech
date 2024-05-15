@@ -8,6 +8,7 @@ public interface CotacaoService {
     void receberCotacao(Cotacao cotacao);
     Cotacao consultarCotacao(UUID id);
     void enviarCotacoesPendentes();
+    void enviarCotacao(UUID id);
     void gerarCotacoesPendentes();
     void aprovarCotacao(UUID id);
 }
