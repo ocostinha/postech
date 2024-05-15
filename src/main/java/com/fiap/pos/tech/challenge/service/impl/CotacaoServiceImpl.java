@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class CotacaoServiceImpl implements CotacaoService {
     @Autowired
@@ -54,9 +56,14 @@ public class CotacaoServiceImpl implements CotacaoService {
         );
     }
 
+    @Override
+    public Cotacao consultarCotacao(UUID id) {
+        return mapper.toEntity(repository.getReferenceById(id));
+    }
+
     private CotacaoEntity cotacaoExistenteStrategy(CotacaoEntity cotacao) {
         switch (cotacao.getStatus()) {
-            case StatusEnum.SOLICITADO -> {
+            case StatusEnum.COTACAO_SOLICITADA -> {
                 return  cotacao;
             }
             default -> {
@@ -78,7 +85,7 @@ public class CotacaoServiceImpl implements CotacaoService {
         cotacao.setEmail(email);
         cotacao.setPlaca(placa);
 
-        cotacao.setStatus(StatusEnum.SOLICITADO);
+        cotacao.setStatus(StatusEnum.COTACAO_SOLICITADA);
     }
 
     private CotacaoEntity obterCotacaoExistente(Cotacao cotacao) {

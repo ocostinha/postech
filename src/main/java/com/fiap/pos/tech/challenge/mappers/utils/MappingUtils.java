@@ -8,6 +8,8 @@ public class MappingUtils {
             "java(com.fiap.pos.tech.challenge.mappers.utils.MappingUtils.generateUuid())";
     public static final String LOCAL_DATE_TIME_NOW =
             "java(com.fiap.pos.tech.challenge.mappers.utils.MappingUtils.localDateTimeNow())";
+    public static final String LOCAL_DATE_TIME_PLUS_YEAR =
+            "java(com.fiap.pos.tech.challenge.mappers.utils.MappingUtils.localDateTimePlusYear())";
 
 
     public static UUID generateUuid() {
@@ -16,5 +18,9 @@ public class MappingUtils {
 
     public static LocalDateTime localDateTimeNow() {
         return LocalDateTime.now();
+    }
+
+    public static LocalDateTime localDateTimePlusYear() {
+        return LocalDateTime.now().plusYears(1);
     }
 }

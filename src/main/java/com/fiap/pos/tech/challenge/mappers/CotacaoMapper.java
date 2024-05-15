@@ -33,7 +33,7 @@ public abstract class CotacaoMapper {
 
     @Mapping(target = "id", defaultExpression = MappingUtils.GENERATE_UUID_EXPRESSION)
     @Mapping(target = "dataHoraCriacao", defaultExpression = MappingUtils.LOCAL_DATE_TIME_NOW)
-    @Mapping(target = "status", defaultValue = "SOLICITADO")
+    @Mapping(target = "status", defaultValue = "COTACAO_SOLICITADA")
     public abstract CotacaoEntity toDb(Cotacao entity,
                                        DadosPessoais dpEntity,
                                        DadosContato dcEntity,

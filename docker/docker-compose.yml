@@ -4,11 +4,12 @@ services:
     image: 'localstack/localstack'
     container_name: 'localstack'
     environment:
-      - SERVICES=sqs
+      - SERVICES=s3,sqs
       - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
       - DATA_DIR=/tmp/localstack/data
       - AWS_ACCESS_KEY_ID=NOT_VALID_KEY
-      - AWS_DEFAULT_REGION=us-west-2
+      - AWS_DEFAULT_REGION=us-east-1
       - AWS_SECRET_ACCESS_KEY=NOT_VALID_SECRET
     ports:
-      - '4566:4566'
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway

@@ -30,7 +30,7 @@ public class SqsServiceImpl implements SqsService {
         dadosPessoaisService.consultar(message);
     }
 
-    @SqsListener(value = "${sqs.queueName.dados-pessoais}")
+    @SqsListener(value = "${sqs.queueName.dados-veiculo}")
     public void dadosVeiculoListener(String message) {
         dadosVeiculoService.consultar(message);
     }

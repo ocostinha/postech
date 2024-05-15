@@ -38,13 +38,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>io.awspring.cloud</groupId>
 			<artifactId>spring-cloud-aws-starter-sqs</artifactId>
-			<version>3.2.0-M1</version>
+			<version>3.0.0-RC2</version>
 		</dependency>
-
-
+		<dependency>
+			<groupId>io.awspring.cloud</groupId>
+			<artifactId>spring-cloud-aws-starter-s3</artifactId>
+			<version>3.0.0-RC2</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.h2database</groupId>

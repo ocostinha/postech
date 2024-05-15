@@ -26,4 +26,8 @@ public class MapperConfig {
     @Bean
     @Primary
     public DadosVeiculoMapper dadosVeiculoMapper() { return new DadosVeiculoMapperImpl(); }
+
+    @Bean
+    @Primary
+    public ApoliceMapper apoliceMapper() { return new ApoliceMapperImpl(); }
 }
