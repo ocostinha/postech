@@ -96,4 +96,19 @@ public class SinistroEntity {
 
     @Column
     private StatusSinistroEnum status;
+
+    @Column
+    private String motivoPrimeiroApelo;
+
+    @Column
+    private String motivoSegundoApelo;
+
+    @Column
+    private String decisaoSinistro;
+
+    @Column
+    private String decisaoApelo;
+
+    @Column
+    private String decisaoSegundoApelo;
 }

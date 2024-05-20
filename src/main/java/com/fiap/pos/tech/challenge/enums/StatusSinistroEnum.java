@@ -5,5 +5,6 @@ public enum StatusSinistroEnum {
     EM_ANALISE,
     FINALIZADO,
     CONTESTADO,
-    ENCERRADO
+    ENCERRADO,
+    CANCELADO
 }

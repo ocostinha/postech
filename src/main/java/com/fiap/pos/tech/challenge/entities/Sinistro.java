@@ -23,4 +23,6 @@ public class Sinistro {
     private DadosContato dadosContatoSinistrado;
     private DadosPessoais dadosPessoaisSinistrado;
     private StatusSinistroEnum status;
+    private String motivoPrimeiroApelo;
+    private String motivoSegundoApelo;
 }
