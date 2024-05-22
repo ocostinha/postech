@@ -2,6 +2,7 @@ package com.fiap.pos.tech.challenge.service.impl;
 
 import com.fiap.pos.tech.challenge.entities.Sinistro;
 import com.fiap.pos.tech.challenge.enums.StatusSinistroEnum;
+import com.fiap.pos.tech.challenge.exceptions.BusinessException;
 import com.fiap.pos.tech.challenge.mappers.SinistroMapper;
 import com.fiap.pos.tech.challenge.repository.ApoliceRepository;
 import com.fiap.pos.tech.challenge.repository.SinistroRepository;
@@ -63,6 +64,10 @@ public class SinistroServiceImpl implements SinistroService {
     public void recorrerDecisaoSinistro(final UUID id, final String motivo) {
         final var sinistro = repository.getReferenceById(id);
 
+        if (!sinistro.getStatus().equals(StatusSinistroEnum.FINALIZADO)) {
+            throw new BusinessException("Apenas sinistros sem apelo podem ser julgados");
+        }
+
         sinistro.setMotivoPrimeiroApelo(motivo);
         sinistro.setStatus(StatusSinistroEnum.CONTESTADO);
 
@@ -74,6 +79,10 @@ public class SinistroServiceImpl implements SinistroService {
     @Override
     public void recorrerDecisaoApelo(final UUID id, final String motivo) {
         final var sinistro = repository.getReferenceById(id);
+
+        if (!sinistro.getStatus().equals(StatusSinistroEnum.FINALIZADO)) {
+            throw new BusinessException("Apenas sinistros sem apelo podem ser julgados");
+        }
 
         sinistro.setMotivoSegundoApelo(motivo);
         sinistro.setStatus(StatusSinistroEnum.CONTESTADO);
@@ -87,8 +96,12 @@ public class SinistroServiceImpl implements SinistroService {
     public void julgarSinistro(final UUID id, final String decisao) {
         final var sinistro = repository.getReferenceById(id);
 
+        if (!sinistro.getStatus().equals(StatusSinistroEnum.CADASTRADO)) {
+            throw new BusinessException("Apenas sinistros sem apelo podem ser julgados");
+        }
+
         sinistro.setDecisaoSinistro(decisao);
-        sinistro.setStatus(StatusSinistroEnum.ENCERRADO);
+        sinistro.setStatus(StatusSinistroEnum.FINALIZADO);
 
         repository.save(sinistro);
 
@@ -99,8 +112,12 @@ public class SinistroServiceImpl implements SinistroService {
     public void julgarApeloDecisaoSinistro(final UUID id, final String decisao) {
         final var sinistro = repository.getReferenceById(id);
 
+        if (sinistro.getStatus().equals(StatusSinistroEnum.CONTESTADO)) {
+            throw new BusinessException("Apenas sinistros contestado ser julgados");
+        }
+
         sinistro.setDecisaoApelo(decisao);
-        sinistro.setStatus(StatusSinistroEnum.ENCERRADO);
+        sinistro.setStatus(StatusSinistroEnum.FINALIZADO);
 
         repository.save(sinistro);
 
@@ -110,6 +127,10 @@ public class SinistroServiceImpl implements SinistroService {
     @Override
     public void julgamentoFinal(final UUID id, final String decisao) {
         final var sinistro = repository.getReferenceById(id);
+
+        if (sinistro.getStatus().equals(StatusSinistroEnum.CONTESTADO)) {
+            throw new BusinessException("Apenas sinistros contestado ser julgados");
+        }
 
         sinistro.setDecisaoSegundoApelo(decisao);
         sinistro.setStatus(StatusSinistroEnum.ENCERRADO);

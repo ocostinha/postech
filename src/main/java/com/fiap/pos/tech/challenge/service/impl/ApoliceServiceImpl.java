@@ -65,6 +65,9 @@ public class ApoliceServiceImpl implements ApoliceService {
     public void cancelarApolice(final UUID id) {
         final var apolice = repository.getReferenceById(id);
 
+        if (!apolice.getStatus().equals(StatusEnum.APOLICE_EMITIDA)) {
+            throw new BusinessException("Apenas apólices emitidas podem ser canceladas.");
+        }
         apolice.setStatus(StatusEnum.APOLICE_CANCELADA);
 
         repository.save(apolice);
@@ -94,6 +97,11 @@ public class ApoliceServiceImpl implements ApoliceService {
     @Override
     public void enviarApolice(final UUID id, final String email) {
         final var apolice = repository.getReferenceById(id);
+
+        if (apolice.getStatus().equals(StatusEnum.APOLICE_SOLICITADA)) {
+            throw new BusinessException(
+                    "Sua apolice está sendo processada, em breve o(a) senhor(a) receberá em seu email");
+        }
 
         if (email == null) {
             //TODO enviar apolice para o email informado

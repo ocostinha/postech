@@ -103,10 +103,15 @@ public class CotacaoServiceImpl implements CotacaoService {
     public void enviarCotacao(final UUID id, final String email) {
         var cotacao = repository.getReferenceById(id);
 
-        if (email == null) {
-            //TODO enviar cotação para o email da cotação
+        if (cotacao.getStatus().equals(StatusEnum.COTACAO_PRONTA) ||
+                cotacao.getStatus().equals(StatusEnum.COTACAO_ENVIADA)) {
+            if (email == null) {
+                //TODO enviar cotação para o email da cotação
+            } else {
+                //TODO enviar cotação para o email informado
+            }
         } else {
-            //TODO enviar cotação para o email informado
+            throw new BusinessException("Cotação em preparação, em breve você receberá por email");
         }
     }
 

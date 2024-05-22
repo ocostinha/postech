@@ -44,24 +44,6 @@ public class SinistroController {
         return new SuccessResponseDTO(String.format(RESPOSTA_PADRAO, id));
     }
 
-    @PostMapping("/{id}/julgar/apelo")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public SuccessResponseDTO julgarApeloSinistro(
-            @PathVariable @NotNull @Valid UUID id, @Valid @RequestBody SinistroDecisaoDTO dto) {
-        service.julgarApeloDecisaoSinistro(id , dto.getDecisao());
-
-        return new SuccessResponseDTO(String.format(RESPOSTA_PADRAO, id));
-    }
-
-    @PostMapping("/{id}/julgar/apelo/final")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public SuccessResponseDTO julgarApeloFinalSinistro(
-            @PathVariable @NotNull @Valid UUID id, @Valid @RequestBody SinistroDecisaoDTO dto) {
-        service.julgamentoFinal(id , dto.getDecisao());
-
-        return new SuccessResponseDTO(String.format(RESPOSTA_PADRAO, id));
-    }
-
     @PostMapping("/{id}/recorrer")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public SuccessResponseDTO recorrerSinistro(
@@ -71,11 +53,29 @@ public class SinistroController {
         return new SuccessResponseDTO(String.format(RESPOSTA_PADRAO, id));
     }
 
+    @PostMapping("/{id}/julgar/apelo")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public SuccessResponseDTO julgarApeloSinistro(
+            @PathVariable @NotNull @Valid UUID id, @Valid @RequestBody SinistroDecisaoDTO dto) {
+        service.julgarApeloDecisaoSinistro(id , dto.getDecisao());
+
+        return new SuccessResponseDTO(String.format(RESPOSTA_PADRAO, id));
+    }
+
     @PostMapping("/{id}/recorrer/apelo")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public SuccessResponseDTO recorrerAoGerenteSinistro(
             @PathVariable @NotNull @Valid UUID id, @Valid @RequestBody SinistroMotivoDTO dto) {
         service.recorrerDecisaoApelo(id , dto.getMotivo());
+
+        return new SuccessResponseDTO(String.format(RESPOSTA_PADRAO, id));
+    }
+
+    @PostMapping("/{id}/julgar/apelo/final")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public SuccessResponseDTO julgarApeloFinalSinistro(
+            @PathVariable @NotNull @Valid UUID id, @Valid @RequestBody SinistroDecisaoDTO dto) {
+        service.julgamentoFinal(id , dto.getDecisao());
 
         return new SuccessResponseDTO(String.format(RESPOSTA_PADRAO, id));
     }
